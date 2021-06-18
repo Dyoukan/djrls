@@ -6,12 +6,11 @@ from django.contrib.auth.models import AbstractUser
 
 class Tenant(models.Model):
     
-    id = models.UUIDField(_("ID"), primary_key=True, editable=False, default=uuid.uuid4)
-    tenant_key = models.CharField(_("TenantId"), max_length=50, unique=True)
-    tenant_name = models.CharField(_("TenantName"), max_length=100)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    tenant_key = models.CharField(max_length=50, unique=True)
+    tenant_name = models.CharField(max_length=100)
 
     class Meta:
-        db_table = 'tenants'
         verbose_name = _("Tenant")
         verbose_name_plural = _("Tenants")
 
@@ -26,11 +25,10 @@ class Tenant(models.Model):
 
 class TenantUser(AbstractUser):
     
-    id = models.UUIDField(_("ID"), primary_key=True, editable=False, default=uuid.uuid4)
-    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, null=True)
 
     class Meta:
-        db_table = 'tenant_users'
         verbose_name = _("TenantUser")
         verbose_name_plural = _("TenantUsers")
 
@@ -42,6 +40,8 @@ class TenantUser(AbstractUser):
 
 class Customer(models.Model):
     
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     address = models.CharField(max_length=128)
@@ -49,7 +49,6 @@ class Customer(models.Model):
     email = models.EmailField(max_length=128)
 
     class Meta:
-        db_table = 'customer'
         verbose_name = _("Customer")
         verbose_name_plural = _("Customers")
 
