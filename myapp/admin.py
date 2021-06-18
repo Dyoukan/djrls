@@ -15,9 +15,9 @@ class CustomerAdmin(admin.ModelAdmin):
 
 def on_create_tenant(sender, instance, created, **kwargs):
     if created:
-        tenant_role = 'tn' + instance.id.hex
+        tenant_role = instance.id
         with connection.cursor() as cursur:
-            cursur.execute(f'CREATE ROLE {tenant_role}')
-            cursur.execute(f'GRANT tenantuser TO {tenant_role}')
+            cursur.execute(f'CREATE ROLE "{tenant_role}"')
+            cursur.execute(f'GRANT tenantuser TO "{tenant_role}"')
 
 post_save.connect(on_create_tenant, sender=models.Tenant)

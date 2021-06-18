@@ -7,10 +7,8 @@ class RlsMiddleware(object):
     def __call__(self, request):
         tenant_id = getattr(request.user, 'tenant_id', None)
         if tenant_id:
-            pass
-            role = 'tn' + tenant_id.hex
             with connection.cursor() as cursor:
-                cursor.execute(f'SET ROLE {role} ')
+                cursor.execute(f'SET ROLE "{tenant_id}" ')
 
         response = self.get_response(request)
         return response
